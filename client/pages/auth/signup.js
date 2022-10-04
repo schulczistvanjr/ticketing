@@ -1,8 +1,8 @@
 import { useState } from 'react';
-
+import Router from 'next/router'
 import useRequest from '../../hooks/useRequest';
 
-const SignUp = () => {
+export const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { doRequest, errors } = useRequest({
@@ -11,7 +11,8 @@ const SignUp = () => {
     body: {
       email,
       password
-    }
+    },
+    onSuccess: () => Router.push('/')
   });
 
   const onSubmit = async event => {
