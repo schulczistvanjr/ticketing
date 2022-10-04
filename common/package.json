@@ -1,7 +1,7 @@
 {
   "name": "@schtickets/common",
   "version": "1.0.1",
-  "description": "",
+  "description": "Description",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [
