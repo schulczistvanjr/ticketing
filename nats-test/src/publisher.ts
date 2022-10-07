@@ -10,7 +10,7 @@ const stan = nats.connect("ticketing", clientId, {
 
 stan.on("connect", async () => {
   console.log("Publisher connected to NATS");
-  console.log("ClientId: ", clientId);
+  console.log("ClientId:", clientId);
 
   const publisher = new TicketCreatedPublisher(stan);
   try {

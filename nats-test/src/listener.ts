@@ -10,7 +10,7 @@ const stan = nats.connect("ticketing", clientId, {
 
 stan.on("connect", () => {
   console.log("Listener connected to NATS");
-  console.log("ClientId: ", clientId);
+  console.log("ClientId:", clientId);
 
   stan.on("close", () => {
     console.log("NATS connection closed!");

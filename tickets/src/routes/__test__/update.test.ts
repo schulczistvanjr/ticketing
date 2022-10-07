@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../../app";
 import { createId, createTicket } from "./helper";
+import { natsWrapper } from "../../nats-wrapper";
+
+jest.mock("../../nats-wrapper");
 
 const title = "Ticket title";
 const price = 10;
@@ -89,4 +92,26 @@ it("updates the ticket provided valid inputs", async () => {
 
   expect(ticketUpdateResponse.body.title).toEqual("Edited title");
   expect(ticketUpdateResponse.body.price).toEqual(20);
+});
+
+it("publishes an event", async () => {
+  const cookie = signin();
+  const response = await createTicket(title, price, cookie);
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "Edited title",
+      price: 20,
+    })
+    .expect(200);
+
+  const ticketUpdateResponse = await request(app)
+    .get(`/api/tickets/${response.body.id}`)
+    .send();
+
+  expect(ticketUpdateResponse.body.title).toEqual("Edited title");
+  expect(ticketUpdateResponse.body.price).toEqual(20);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
