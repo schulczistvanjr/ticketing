@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Ticket } from "../ticket";
 
 it("implements optimistic concurrency control", async () => {
@@ -33,6 +34,7 @@ it("implements optimistic concurrency control", async () => {
 
 it("increments the version number on multiple saves", async () => {
   const ticket = Ticket.build({
+    title: "title",
     price: 20,
     userId: "123",
   });

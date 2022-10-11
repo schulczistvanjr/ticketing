@@ -2,6 +2,8 @@ import request from "supertest";
 import { app } from "../../app";
 import { createId, createTicket } from "./helper";
 import { natsWrapper } from "../../nats-wrapper";
+import { Ticket } from "../../models/ticket";
+import mongoose from "mongoose";
 
 jest.mock("../../nats-wrapper");
 
@@ -114,4 +116,26 @@ it("publishes an event", async () => {
   expect(ticketUpdateResponse.body.title).toEqual("Edited title");
   expect(ticketUpdateResponse.body.price).toEqual(20);
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it("rejects updates if the ticket is reserved", async () => {
+  const cookie = signin();
+  const response = await createTicket(title, price, cookie);
+
+  const ticket = await Ticket.findById(response.body.id);
+  ticket!.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket!.save();
+
+  const updateResponse = await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "Edited title",
+      price: 20,
+    })
+    .expect(400);
+
+  expect(updateResponse.body.errors).toEqual([
+    { message: "Cannot edit a reserved ticket" },
+  ]);
 });
