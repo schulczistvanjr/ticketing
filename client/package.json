@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next"
+    "dev": "next",
+    "update:common": "npm remove @schtickets/common && npm i @schtickets/common"
   },
   "keywords": [],
   "author": "",
