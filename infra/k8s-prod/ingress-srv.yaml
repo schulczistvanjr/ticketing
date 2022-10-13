@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-    - host: ticketing.dev
+    - host: www.istvanschulcz.tech
       http:
         paths:
           - path: /api/payments/?(.*)
