@@ -22,3 +22,8 @@ jobs:
       - run: docker push $DOCKER_USERNAME/auth
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing
+      - run: kubectl rollout restart deployment auth-depl
