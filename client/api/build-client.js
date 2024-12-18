@@ -10,7 +10,7 @@ export default ({ req }) => {
     //   headers: req.headers,
     // });
     return axios.create({
-      baseURL: "http://istvanschulcz.tech/",
+      baseURL: "http://ticketing.dev",
       headers: req.headers,
     });
   } else {
